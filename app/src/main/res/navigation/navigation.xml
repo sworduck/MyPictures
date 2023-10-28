@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/pictureListFragment">
+
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.pictures.presentation.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/pictureListFragment"
+        android:name="com.pictures.presentation.search.PictureListFragment"
+        android:label="fragment_picture_list"
+        tools:layout="@layout/fragment_picture_list" />
+</navigation>

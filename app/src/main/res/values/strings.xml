@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyPictures</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_favorite">Favorite</string>
+</resources>
