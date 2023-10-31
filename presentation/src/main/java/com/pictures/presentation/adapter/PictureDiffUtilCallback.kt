@@ -10,6 +10,6 @@ class PictureDiffUtilCallback : DiffUtil.ItemCallback<PictureData>() {
     }
 
     override fun areContentsTheSame(oldItem: PictureData, newItem: PictureData): Boolean {
-        return oldItem == newItem
+        return oldItem.hashCode() == newItem.hashCode()
     }
 }

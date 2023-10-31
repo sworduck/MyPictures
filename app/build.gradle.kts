@@ -68,6 +68,7 @@ dependencies {
     implementation (libs.androidx.lifecycle.viewmodel.compose)
     implementation (libs.androidx.navigation.ktx)
     implementation (libs.androidx.compose.foundation)
+    implementation(libs.swiperefreshlayout)
 
     // Hilt
     implementation(libs.hilt)

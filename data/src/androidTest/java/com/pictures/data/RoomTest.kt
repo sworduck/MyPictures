@@ -1,20 +1,14 @@
 package com.pictures.data
 
-import android.content.Context
-import androidx.room.Dao
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.pictures.data.database.MyPictureDb
 import com.pictures.data.database.dao.PicturesDao
 import com.pictures.data.database.entity.PictureEntity
-import com.pictures.data.network.NetworkConstant
-import com.pictures.data.network.retrofit.PictureApi
-import com.pictures.data.network.retrofit.provideRetrofit
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Retrofit
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -61,7 +55,7 @@ class RoomTest {
     fun testInsert() {
         dao.insert(tempPicture1)
         dao.insert(tempPicture2)
-        assert(dao.getAllPicture().firstOrNull{it.id == testedId} != null)
+        assert(dao.getFavoritePictures().firstOrNull{it.id == testedId} != null)
     }
 
     @Test

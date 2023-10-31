@@ -39,12 +39,8 @@ class FavoriteViewModel @Inject constructor(
     }
 
     fun remove(item: PictureData) {
-        removePicture(item)
-    }
-
-    private fun removePicture(picture: PictureData) {
         viewModelScope.launch {
-            deleteFavoritePictureUseCase.invoke(picture)
+            deleteFavoritePictureUseCase.invoke(item)
         }
     }
 }

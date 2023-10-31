@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.pictures.data.database.entity.PictureEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PicturesDao {
@@ -17,7 +18,7 @@ interface PicturesDao {
     fun getPictureById(id: Int): PictureEntity
 
     @Query("SELECT id FROM pictureEntity")
-    fun getIdListFavoritePictures (): List<Int>
+    fun getIdListFavoritePictures (): Flow<List<Int>>
 
     @Update
     fun update(pictureEntity: PictureEntity)

@@ -17,7 +17,9 @@ class RemoteDataSourceImpl @Inject constructor(private val retrofitApi: PictureA
                 pageSize = NetworkConstant.NETWORK_PAGE_SIZE,
                 enablePlaceholders = true
             ),
-            pagingSourceFactory = { PictureCloudPagingSourceImpl(retrofitApi) }
+            pagingSourceFactory = {
+                PictureCloudPagingSourceImpl(retrofitApi)
+            }
         ).flow
     }
 }

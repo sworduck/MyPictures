@@ -2,10 +2,13 @@ package com.pictures.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.pictures.data.PictureRepositoryImpl
 import com.pictures.data.data_sources.cache.CacheDataSource
 import com.pictures.data.data_sources.cache.CacheDataSourceImpl
+import com.pictures.data.data_sources.cloud.RemoteDataSource
 import com.pictures.data.database.MyPictureDb
 import com.pictures.data.database.dao.PicturesDao
+import com.pictures.domain.repository.PictureRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +16,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-/*
 @InstallIn(SingletonComponent::class)
 @Module
 class DataBaseModule {
@@ -41,4 +43,16 @@ class DataBaseModule {
     fun provideCacheDataSource(dao: PicturesDao): CacheDataSource {
         return CacheDataSourceImpl(dao)
     }
-}*/
+
+    @Provides
+    @Singleton
+    fun providePictureRepository(
+        cacheDataSource: CacheDataSource,
+        remoteDataSource: RemoteDataSource,
+    ): PictureRepository {
+        return PictureRepositoryImpl(
+            cacheDataSource = cacheDataSource,
+            remoteDataSource = remoteDataSource
+        )
+    }
+}

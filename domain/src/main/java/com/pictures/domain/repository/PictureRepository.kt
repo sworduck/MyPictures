@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface PictureRepository {
 
+    fun getAllFavoritePictureId(): Flow<List<Int>>
+
     fun getPhotos(): Flow<PagingData<PictureData>>
 
     fun savePicture(picture: PictureData) : Result<Unit>

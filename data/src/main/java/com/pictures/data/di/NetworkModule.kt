@@ -1,12 +1,9 @@
 package com.pictures.data.di
 
-import com.pictures.data.PictureRepositoryImpl
-import com.pictures.data.data_sources.cache.CacheDataSource
 import com.pictures.data.data_sources.cloud.RemoteDataSource
 import com.pictures.data.data_sources.cloud.RemoteDataSourceImpl
 import com.pictures.data.network.NetworkConstant
 import com.pictures.data.network.retrofit.PictureApi
-import com.pictures.domain.repository.PictureRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +15,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-/*
 @InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
@@ -46,23 +42,11 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providePictureRepository(
-        cacheDataSource: CacheDataSource,
-        remoteDataSource: RemoteDataSource,
-    ): PictureRepository {
-        return PictureRepositoryImpl(
-            cacheDataSource = cacheDataSource,
-            remoteDataSource = remoteDataSource
-        )
-    }
-
-    @Provides
-    @Singleton
     fun provideGsonConverterFactory(): Converter.Factory = GsonConverterFactory.create()
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): `OkHttpClient` =
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
@@ -71,4 +55,4 @@ class NetworkModule {
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-}*/
+}

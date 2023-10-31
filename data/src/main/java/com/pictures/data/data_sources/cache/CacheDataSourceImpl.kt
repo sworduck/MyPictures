@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CacheDataSourceImpl @Inject constructor(private val dao: PicturesDao) : CacheDataSource {
-    override fun getIdListFavoritePictures(): List<Int> {
+
+    override fun getIdListFavoritePictures(): Flow<List<Int>> {
         return dao.getIdListFavoritePictures()
     }
 

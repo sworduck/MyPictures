@@ -26,19 +26,21 @@ class PictureListViewModel @Inject constructor(
     private val _pictureList =
         MutableStateFlow<PagingData<PictureData>>(PagingData.empty())
     val pictureList: Flow<PagingData<PictureData>> =
-        _pictureList.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), PagingData.empty())
-
+        _pictureList.stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
     init {
         loadPhotos()
     }
 
     private fun loadPhotos() {
+
         viewModelScope.launch {
-            getPagePictureUseCase.invoke().cachedIn(viewModelScope).cachedIn(viewModelScope).collect{
-                _pictureList.value = it
-            }
+            getPagePictureUseCase.invoke().cachedIn(viewModelScope).cachedIn(viewModelScope)
+                .collect {
+                    _pictureList.value = it
+                }
         }
+
     }
 
     fun addPicture(picture: PictureData) {

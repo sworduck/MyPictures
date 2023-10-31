@@ -42,7 +42,7 @@ class PictureListFragment : Fragment() {
     private fun initView() {
         initRecyclerView()
         binding.mainRetryButton.setOnClickListener {
-            setupView()
+            searchAdapter.refresh()
         }
     }
 
@@ -67,6 +67,10 @@ class PictureListFragment : Fragment() {
                         }
                     }
                 }
+        }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            searchAdapter.refresh()
+            binding.swipeRefreshLayout.isRefreshing = false
         }
         setupView()
     }

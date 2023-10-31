@@ -10,27 +10,27 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PictureRepositoryImpl @Inject constructor(
     private val cacheDataSource: CacheDataSource,
     private val remoteDataSource: RemoteDataSource,
 ) : PictureRepository {
 
-    private val idListFavoritePictures: MutableList<Int> =
-        getIdListFavoritePictures().toMutableList()
-
-    private fun getIdListFavoritePictures(): List<Int> {
+    override fun getAllFavoritePictureId(): Flow<List<Int>> {
         return cacheDataSource.getIdListFavoritePictures()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getPhotos(): Flow<PagingData<PictureData>> {
-        return remoteDataSource.getPhotos().mapLatest { pagingData ->
+        return remoteDataSource.getPhotos()
+
+    /*.mapLatest { pagingData ->
             pagingData.map { picture ->
                 if (picture.id.toInt() in idListFavoritePictures)
                     picture.copy(favorite = true) else picture
             }
-        }
+        }*/
     }
 
     override fun savePicture(picture: PictureData): Result<Unit> {
@@ -39,6 +39,7 @@ class PictureRepositoryImpl @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getFavoritePictures(): Flow<PagingData<PictureData>> {
         return cacheDataSource.getFavoritePictures().mapLatest { pagingData ->
             pagingData.map { picture ->
