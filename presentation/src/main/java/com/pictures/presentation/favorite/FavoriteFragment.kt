@@ -10,13 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
-import androidx.paging.filter
 import com.pictures.domain.PictureData
-import com.pictures.presentation.databinding.FragmentFavoriteBinding
 import com.pictures.presentation.adapter.FragmentAdapter
+import com.pictures.presentation.databinding.FragmentFavoriteBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -63,15 +61,12 @@ class FavoriteFragment : Fragment() {
                     }
                 }
         }
+        setupView()
+    }
 
+    private fun setupView() {
         lifecycleScope.launch {
-            vm.pictureList
-                .cachedIn(lifecycleScope)
-                .combine(vm.removedItemsFlow) { pagingData, removed ->
-                    pagingData.filter {
-                        it !in removed
-                    }
-                }
+            vm.pictureList.cachedIn(lifecycleScope)
                 .collectLatest {
                     favoriteAdapter.submitData(it)
                 }

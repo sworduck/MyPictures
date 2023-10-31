@@ -12,11 +12,17 @@ import com.pictures.data.database.dao.PicturesDao
 import com.pictures.data.network.NetworkConstant
 import com.pictures.data.network.retrofit.PictureApi
 import com.pictures.domain.repository.PictureRepository
+import com.pictures.domain.usecases.DeleteFavoritePictureUseCase
+import com.pictures.domain.usecases.GetFavoritePictureUseCase
+import com.pictures.domain.usecases.GetPagePictureUseCase
+import com.pictures.domain.usecases.SaveFavoritePictureUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
@@ -65,6 +71,29 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideGetPagePictureUseCase(repository: PictureRepository, coroutineDispatcher: CoroutineDispatcher): GetPagePictureUseCase =
+        GetPagePictureUseCase(repository,coroutineDispatcher)
+
+    @Provides
+    @Singleton
+    fun provideSaveFavoritePictureUseCase(repository: PictureRepository, coroutineDispatcher: CoroutineDispatcher): SaveFavoritePictureUseCase =
+        SaveFavoritePictureUseCase(repository,coroutineDispatcher)
+
+    @Provides
+    @Singleton
+    fun provideDeleteFavoritePictureUseCase(repository: PictureRepository, coroutineDispatcher: CoroutineDispatcher): DeleteFavoritePictureUseCase =
+        DeleteFavoritePictureUseCase(repository,coroutineDispatcher)
+
+    @Provides
+    @Singleton
+    fun provideGetFavoritePicturesUseCase(repository: PictureRepository, coroutineDispatcher: CoroutineDispatcher): GetFavoritePictureUseCase =
+        GetFavoritePictureUseCase(repository,coroutineDispatcher)
+
+    @Provides
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @Singleton
     fun provideApiService(retrofit: Retrofit): PictureApi {
         return retrofit.create(PictureApi::class.java)
     }
@@ -93,7 +122,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): `OkHttpClient` =
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()

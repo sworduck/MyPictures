@@ -1,14 +1,23 @@
 package com.pictures.data.data_sources.cloud
 
-import com.pictures.data.network.data.Picture
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.pictures.data.network.NetworkConstant
 import com.pictures.data.network.retrofit.PictureApi
-import com.pictures.domain.paging_source.PictureCloudPagingSource
-import retrofit2.Call
+import com.pictures.domain.PictureData
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(private val retrofitApi: PictureApi):
     RemoteDataSource {
-    override fun getPictureCloudPagingSource(): PictureCloudPagingSource {
-        return PictureCloudPagingSourceImpl(retrofitApi)
+    override fun getPhotos(): Flow<PagingData<PictureData>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = NetworkConstant.NETWORK_PAGE_SIZE,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { PictureCloudPagingSourceImpl(retrofitApi) }
+        ).flow
     }
 }

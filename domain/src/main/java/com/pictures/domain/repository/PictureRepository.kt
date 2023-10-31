@@ -2,32 +2,20 @@ package com.pictures.domain.repository
 
 import androidx.paging.PagingData
 import com.pictures.domain.PictureData
-import com.pictures.domain.paging_source.PictureCachePagingSource
-import com.pictures.domain.paging_source.PictureCloudPagingSource
 import kotlinx.coroutines.flow.Flow
 
 
 interface PictureRepository {
 
-    companion object {
-        val pictureListIdFromCache: ArrayList<Int> = arrayListOf()
-    }
+    fun getPhotos(): Flow<PagingData<PictureData>>
 
-    fun getPictureCloudPagingSource(): PictureCloudPagingSource
+    fun savePicture(picture: PictureData) : Result<Unit>
 
-    fun getPictureCachePagingSource(): PictureCachePagingSource
-
-    fun savePicture(picture: PictureData)
-
-    fun getFavoritePictures(): List<PictureData>
-
-    fun changeFavorites(id: Int, favorites: Boolean)
-
-    fun getAllPicture(): List<PictureData>
+    fun getFavoritePictures(): Flow<PagingData<PictureData>>
 
     fun insert(pictureEntity: PictureData)
 
-    fun delete(id: Int)
+    fun delete(id: Int): Result<Unit>
 
     fun deleteAll()
 }

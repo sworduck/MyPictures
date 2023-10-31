@@ -55,6 +55,7 @@ class PictureListFragment : Fragment() {
                             binding.searchRecycler.isVisible = true
                             binding.layoutErrorNetwork.isVisible = false
                         }
+
                         is LoadState.Error -> {
                             binding.searchRecycler.isVisible = false
                             binding.layoutErrorNetwork.isVisible = true
@@ -81,17 +82,12 @@ class PictureListFragment : Fragment() {
 
     private fun initRecyclerView() {
         binding.searchRecycler.adapter = searchAdapter.withLoadStateFooter(
-            footer = SearchLoadStateAdapter{ searchAdapter.retry() }
+            footer = SearchLoadStateAdapter { searchAdapter.retry() }
         )
     }
 
     private fun onFeaturedClick(picture: PictureData) =
-        if (picture.favorite) {
-            picture.favorite = false
-            vm.removePicture(picture)
-        }
-        else {
-            picture.favorite = true
-            vm.addPicture(picture)
-        }
+        if (picture.favorite) vm.removePicture(picture)
+        else vm.addPicture(picture)
+
 }

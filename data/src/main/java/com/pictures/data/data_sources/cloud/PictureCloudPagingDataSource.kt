@@ -1,22 +1,46 @@
 package com.pictures.data.data_sources.cloud
 
-import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.pictures.data.network.NetworkConstant.Companion.NETWORK_PAGE_SIZE
+import com.pictures.data.network.NetworkConstant.Companion.STARTING_KEY
 import com.pictures.data.network.retrofit.PictureApi
 import com.pictures.data.toPictureData
 import com.pictures.domain.PictureData
 import com.pictures.domain.paging_source.PictureCloudPagingSource
-import com.pictures.domain.repository.PictureRepository
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
-import kotlin.math.max
 
 class PictureCloudPagingSourceImpl @Inject constructor (private val service: PictureApi) : PictureCloudPagingSource() {
 
-    companion object {
-        private const val STARTING_KEY = 1
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PictureData> {
+        val position = params.key ?: STARTING_KEY
+        return try {
+            val photos = service.getPictureList(position,NETWORK_PAGE_SIZE).map { it.toPictureData() }
+            LoadResult.Page(
+                data = photos,
+                prevKey = if (position == STARTING_KEY) null else position,
+                nextKey = if (photos.isEmpty()) null else position + 1
+
+            )
+        } catch (exception: IOException) {
+            return LoadResult.Error(exception)
+        } catch (exception: HttpException) {
+            return LoadResult.Error(exception)
+        }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PictureData> {
+    override fun getRefreshKey(state: PagingState<Int, PictureData>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            // This loads starting from previous page, but since PagingConfig.initialLoadSize spans
+            // multiple pages, the initial load will still load items centered around
+            // anchorPosition. This also prevents needing to immediately launch prepend due to
+            // prefetchDistance.
+            state.closestPageToPosition(anchorPosition)?.prevKey
+        }
+    }
+
+    /*override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PictureData> {
         // If params.key is null, it is the first load, so we start loading with STARTING_KEY
         try {
             val startKey = params.key ?: STARTING_KEY
@@ -56,5 +80,5 @@ class PictureCloudPagingSourceImpl @Inject constructor (private val service: Pic
         }
     }
 
-    private fun ensureValidKey(key: Int) = max(STARTING_KEY, key)
+    private fun ensureValidKey(key: Int) = max(STARTING_KEY, key)*/
 }

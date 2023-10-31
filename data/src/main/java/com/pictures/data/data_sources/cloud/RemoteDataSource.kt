@@ -1,9 +1,9 @@
 package com.pictures.data.data_sources.cloud
 
-import com.pictures.data.network.data.Picture
-import com.pictures.domain.paging_source.PictureCloudPagingSource
-import retrofit2.Call
+import androidx.paging.PagingData
+import com.pictures.domain.PictureData
+import kotlinx.coroutines.flow.Flow
 
 interface RemoteDataSource {
-    fun getPictureCloudPagingSource(): PictureCloudPagingSource
+    fun getPhotos(): Flow<PagingData<PictureData>>
 }

@@ -1,54 +1,49 @@
 package com.pictures.data
 
 import androidx.paging.PagingData
+import androidx.paging.map
 import com.pictures.data.data_sources.cache.CacheDataSource
 import com.pictures.data.data_sources.cloud.RemoteDataSource
-import com.pictures.data.database.entity.PictureEntity
 import com.pictures.domain.PictureData
-import com.pictures.domain.paging_source.PictureCachePagingSource
-import com.pictures.domain.paging_source.PictureCloudPagingSource
 import com.pictures.domain.repository.PictureRepository
-import com.pictures.domain.repository.PictureRepository.Companion.pictureListIdFromCache
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
 
 class PictureRepositoryImpl @Inject constructor(
     private val cacheDataSource: CacheDataSource,
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
 ) : PictureRepository {
 
-    override fun getPictureCachePagingSource(): PictureCachePagingSource {
-        return cacheDataSource.getPictureCachePagingSource()
+    private val idListFavoritePictures: MutableList<Int> =
+        getIdListFavoritePictures().toMutableList()
+
+    private fun getIdListFavoritePictures(): List<Int> {
+        return cacheDataSource.getIdListFavoritePictures()
     }
 
-    override fun getPictureCloudPagingSource(): PictureCloudPagingSource {
-        CoroutineScope(Dispatchers.IO).launch {
-            pictureListIdFromCache.addAll(cacheDataSource.getAllPicture()
-                .map { it.id.toInt() })
-        }
-        return remoteDataSource.getPictureCloudPagingSource()
-    }
-
-    override fun savePicture(picture: PictureData) {
-        cacheDataSource.insert(picture.toPictureEntity())
-    }
-
-    override fun getFavoritePictures(): List<PictureData> {
-        return cacheDataSource.getFavoritePictures().map {
-            it.toPictureData()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getPhotos(): Flow<PagingData<PictureData>> {
+        return remoteDataSource.getPhotos().mapLatest { pagingData ->
+            pagingData.map { picture ->
+                if (picture.id.toInt() in idListFavoritePictures)
+                    picture.copy(favorite = true) else picture
+            }
         }
     }
 
-    override fun changeFavorites(id: Int, favorites: Boolean) {
-        cacheDataSource.changeFavorites(id,favorites)
+    override fun savePicture(picture: PictureData): Result<Unit> {
+        return kotlin.runCatching {
+            cacheDataSource.insert(picture.toPictureEntity())
+        }
     }
 
-    override fun getAllPicture(): List<PictureData> {
-        return cacheDataSource.getAllPicture().map {
-            it.toPictureData()
+    override fun getFavoritePictures(): Flow<PagingData<PictureData>> {
+        return cacheDataSource.getFavoritePictures().mapLatest { pagingData ->
+            pagingData.map { picture ->
+                picture.toPictureData()
+            }
         }
     }
 
@@ -56,26 +51,14 @@ class PictureRepositoryImpl @Inject constructor(
         cacheDataSource.insert(pictureEntity.toPictureEntity())
     }
 
-    override fun delete(id: Int) {
-        cacheDataSource.delete(id)
+    override fun delete(id: Int): Result<Unit> {
+        return kotlin.runCatching {
+            cacheDataSource.delete(id)
+        }
     }
 
     override fun deleteAll() {
         cacheDataSource.deleteAll()
-    }
-
-    fun savePicture(picture: PictureEntity) {
-        CoroutineScope(Dispatchers.IO).launch {
-            cacheDataSource.insert(picture)
-            pictureListIdFromCache.add(picture.id.toInt())
-        }
-    }
-
-    fun removePicture(picture: PictureEntity) {
-        CoroutineScope(Dispatchers.IO).launch {
-            cacheDataSource.delete(picture.id.toInt())
-            pictureListIdFromCache.remove(picture.id.toInt())
-        }
     }
 
 }

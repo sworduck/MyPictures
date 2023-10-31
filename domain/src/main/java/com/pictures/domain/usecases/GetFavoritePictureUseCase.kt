@@ -10,11 +10,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetPagePictureUseCase @Inject constructor(
+class GetFavoritePictureUseCase @Inject constructor(
     private val pictureRepository: PictureRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) {
     fun invoke(): Flow<PagingData<PictureData>> {
-        return pictureRepository.getPhotos().flowOn(ioDispatcher)
+        return pictureRepository.getFavoritePictures().flowOn(ioDispatcher)
     }
 }

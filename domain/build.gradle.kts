@@ -70,6 +70,9 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.compose.hilt.navigation)
 
+    //Retrofit
+    implementation(libs.retrofit)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.android.junit)
     androidTestImplementation(libs.android.espresso)
