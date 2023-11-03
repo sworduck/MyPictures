@@ -9,8 +9,10 @@ import com.pictures.domain.PictureData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class RemoteDataSourceImpl @Inject constructor(private val retrofitApi: PictureApi):
-    RemoteDataSource {
+class RemoteDataSourceImpl @Inject constructor(
+    private val api: PictureApi
+): RemoteDataSource {
+
     override fun getPhotos(): Flow<PagingData<PictureData>> {
         return Pager(
             config = PagingConfig(
@@ -18,7 +20,9 @@ class RemoteDataSourceImpl @Inject constructor(private val retrofitApi: PictureA
                 enablePlaceholders = true
             ),
             pagingSourceFactory = {
-                PictureCloudPagingSourceImpl(retrofitApi)
+                PictureCloudPagingSourceImpl(
+                    service = api,
+                )
             }
         ).flow
     }

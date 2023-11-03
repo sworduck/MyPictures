@@ -26,7 +26,7 @@ class DataBaseModule {
         return Room.databaseBuilder(
             context,
             MyPictureDb::class.java,
-            "testdb.db"
+            MyPictureDb.DATABASE_NAME
         )
             .fallbackToDestructiveMigration()
             .build()

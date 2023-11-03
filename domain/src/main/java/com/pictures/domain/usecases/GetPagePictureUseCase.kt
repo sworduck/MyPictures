@@ -16,13 +16,14 @@ import javax.inject.Singleton
 @Singleton
 class GetPagePictureUseCase @Inject constructor(
     private val pictureRepository: PictureRepository,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
 ) {
     fun invoke(): Flow<PagingData<PictureData>> {
         return pictureRepository.getPhotos()
-            .cachedIn(scope = CoroutineScope(ioDispatcher)).combine(pictureRepository.getAllFavoritePictureId()) { pagingData, favoritePictures ->
+            .cachedIn(scope = CoroutineScope(ioDispatcher))
+            .combine(pictureRepository.getAllFavoritePictureId()) { pagingData, picturesId ->
                 pagingData.map { picture ->
-                    if (picture.id.toInt() in favoritePictures)
+                    if (picture.id.toInt() in picturesId)
                         picture.copy(favorite = true) else picture
                 }
             }

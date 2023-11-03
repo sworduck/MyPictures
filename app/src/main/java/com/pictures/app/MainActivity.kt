@@ -1,11 +1,10 @@
-package com.example.mypictures
+package com.pictures.app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.pictures.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -15,7 +15,7 @@ interface PictureRepository {
 
     fun getFavoritePictures(): Flow<PagingData<PictureData>>
 
-    fun insert(pictureEntity: PictureData)
+    fun insert(pictureData: PictureData)
 
     fun delete(id: Int): Result<Unit>
 

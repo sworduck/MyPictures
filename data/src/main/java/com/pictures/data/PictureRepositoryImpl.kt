@@ -24,13 +24,6 @@ class PictureRepositoryImpl @Inject constructor(
 
     override fun getPhotos(): Flow<PagingData<PictureData>> {
         return remoteDataSource.getPhotos()
-
-    /*.mapLatest { pagingData ->
-            pagingData.map { picture ->
-                if (picture.id.toInt() in idListFavoritePictures)
-                    picture.copy(favorite = true) else picture
-            }
-        }*/
     }
 
     override fun savePicture(picture: PictureData): Result<Unit> {
@@ -48,8 +41,8 @@ class PictureRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun insert(pictureEntity: PictureData) {
-        cacheDataSource.insert(pictureEntity.toPictureEntity())
+    override fun insert(pictureData: PictureData) {
+        cacheDataSource.insert(pictureData.toPictureEntity())
     }
 
     override fun delete(id: Int): Result<Unit> {

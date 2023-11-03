@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CacheDataSource {
 
-    fun getIdListFavoritePictures(): Flow<List<Int>>
+    fun getIdListFavoritePictures():  Flow<List<Int>>
 
     fun getFavoritePictures():  Flow<PagingData<PictureEntity>>
 

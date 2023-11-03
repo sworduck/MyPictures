@@ -3,10 +3,11 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.junit5)
 }
 
 android {
-    namespace = "com.pictures"
+    namespace = "com.pictures.app"
     compileSdk = extra.get("compileSdk") as Int
 
     defaultConfig {
@@ -21,7 +22,6 @@ android {
             useSupportLibrary = true
         }
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -50,6 +50,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
@@ -69,6 +70,13 @@ dependencies {
     implementation (libs.androidx.navigation.ktx)
     implementation (libs.androidx.compose.foundation)
     implementation(libs.swiperefreshlayout)
+    implementation(libs.androidx.paging)
+    //Junit5
+    testRuntimeOnly(libs.junit5.engine)
+    testImplementation(libs.junit5.api)
+    testImplementation(libs.junit5.params)
+    testRuntimeOnly(libs.junit5.vintage)
+    androidTestImplementation(libs.junit5)
 
     // Hilt
     implementation(libs.hilt)

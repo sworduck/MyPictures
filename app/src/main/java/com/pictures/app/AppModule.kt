@@ -1,4 +1,4 @@
-package com.example.mypictures
+package com.pictures.app
 
 import dagger.Module
 import dagger.hilt.InstallIn

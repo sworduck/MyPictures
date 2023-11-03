@@ -6,17 +6,38 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.pictures.data.database.MyPictureDb
 import com.pictures.data.database.dao.PicturesDao
 import com.pictures.data.database.entity.PictureEntity
+import com.pictures.data.network.NetworkConstant
+import com.pictures.data.network.data.PictureCloud
+import com.pictures.data.network.retrofit.PictureApi
+import com.pictures.data.network.retrofit.provideRetrofit
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import retrofit2.Response
+import retrofit2.Retrofit
 
 @RunWith(AndroidJUnit4::class)
-class RoomTest {
+class RetrofitRoomTest {
 
     private lateinit var db: MyPictureDb
     private lateinit var dao: PicturesDao
     private val testedId = 5L
+
+    @Test
+    fun testGetPeopleResponse() {
+        val service = provideRetrofit().create(PictureApi::class.java)
+        var response: Response<List<PictureCloud>>?
+        runBlocking {
+            response = service.getPictureList(1,10)
+        }
+        val errorBody = response?.errorBody()
+        assert(errorBody == null)
+        val responseWrapper = response?.body()
+        assert(responseWrapper != null)
+        assert(response?.code() == 200)
+    }
 
     private val tempPicture1 = PictureEntity(
         testedId,
@@ -55,7 +76,7 @@ class RoomTest {
     fun testInsert() {
         dao.insert(tempPicture1)
         dao.insert(tempPicture2)
-        assert(dao.getFavoritePictures().firstOrNull{it.id == testedId} != null)
+        assert(dao.getAllPicture().firstOrNull{it.id == testedId} != null)
     }
 
     @Test

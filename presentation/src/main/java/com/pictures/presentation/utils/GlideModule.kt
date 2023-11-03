@@ -10,7 +10,7 @@ class GlideModule : AppGlideModule() {
     object GlideProgressBar {
         fun getCircularProgressDrawable(context: Context) =
             CircularProgressDrawable(context).apply {
-                setColorSchemeColors(0xFFFFFFFF.toInt())
+                setColorSchemeColors(0xFF000000.toInt())
                 strokeWidth = 15f
                 centerRadius = 50f
                 start()

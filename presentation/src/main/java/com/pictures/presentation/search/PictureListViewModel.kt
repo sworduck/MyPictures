@@ -35,7 +35,7 @@ class PictureListViewModel @Inject constructor(
     private fun loadPhotos() {
 
         viewModelScope.launch {
-            getPagePictureUseCase.invoke().cachedIn(viewModelScope).cachedIn(viewModelScope)
+            getPagePictureUseCase.invoke().cachedIn(viewModelScope)
                 .collect {
                     _pictureList.value = it
                 }

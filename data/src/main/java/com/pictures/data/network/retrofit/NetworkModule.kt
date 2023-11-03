@@ -8,8 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 fun provideRetrofit(): Retrofit {
     return Retrofit.Builder()
         .baseUrl(NetworkConstant.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
         .client(OkHttpClient.Builder().build())
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
-
 }

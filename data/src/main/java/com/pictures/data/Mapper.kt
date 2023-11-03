@@ -1,7 +1,7 @@
 package com.pictures.data
 
 import com.pictures.data.database.entity.PictureEntity
-import com.pictures.data.network.data.Picture
+import com.pictures.data.network.data.PictureCloud
 import com.pictures.domain.PictureData
 
 fun PictureData.toPictureEntity(): PictureEntity {
@@ -28,7 +28,7 @@ fun PictureEntity.toPictureData(): PictureData {
     )
 }
 
-fun Picture.toPictureData(): PictureData {
+fun PictureCloud.toPictureData(): PictureData {
     return PictureData(
         id = id.toLong(),
         author = author,

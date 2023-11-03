@@ -12,7 +12,7 @@ class DeleteFavoritePictureUseCase @Inject constructor(
     private val pictureRepository: PictureRepository,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
-    suspend operator fun invoke(pictureData: PictureData): Result<Unit> {
+    suspend operator fun invoke(pictureData: PictureData) {
         return withContext(ioDispatcher) {
             pictureRepository.delete(pictureData.id.toInt())
         }

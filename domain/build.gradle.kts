@@ -65,6 +65,12 @@ dependencies {
     implementation (libs.androidx.compose.foundation)
     implementation(libs.androidx.paging)
 
+    //Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
+    implementation(libs.room.paging)
+
     // Hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)

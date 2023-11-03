@@ -11,9 +11,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
 import com.pictures.domain.PictureData
-import com.pictures.presentation.databinding.FragmentPictureListBinding
 import com.pictures.presentation.adapter.FragmentAdapter
 import com.pictures.presentation.adapter.SearchLoadStateAdapter
+import com.pictures.presentation.databinding.FragmentPictureListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -74,7 +74,6 @@ class PictureListFragment : Fragment() {
         }
         setupView()
     }
-
     private fun setupView() {
         lifecycleScope.launch {
             vm.pictureList.cachedIn(lifecycleScope)

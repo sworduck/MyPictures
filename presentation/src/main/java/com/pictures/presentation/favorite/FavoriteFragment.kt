@@ -56,7 +56,8 @@ class FavoriteFragment : Fragment() {
                             binding.layoutEmptyList.isVisible = true
                         }
                         is LoadState.NotLoading -> {
-
+                            binding.searchRecycler.isVisible = true
+                            binding.layoutEmptyList.isVisible = false
                         }
                     }
                 }
