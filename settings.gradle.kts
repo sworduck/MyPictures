@@ -15,8 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "MyPictures"
 include(":app")
-include(":core")
 include(":domain")
 include(":data")
-include(":boundaries")
 include(":presentation")
